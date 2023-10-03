@@ -1,0 +1,45 @@
+name: "CustomNet"
+layer {
+  name: "data"
+  type: "Input"
+  top: "data"
+  input_param { shape: { dim: 1 dim: 3 dim: 224 dim: 224 } }
+}
+layer {
+  name: "conv1"
+  type: "Convolution"
+  bottom: "data"
+  top: "conv1"
+  convolution_param {
+    num_output: 32
+    kernel_size: 5
+    stride: 1
+  }
+}
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
+layer {
+  name: "fc1"
+  type: "InnerProduct"
+  bottom: "conv1"
+  top: "fc1"
+  inner_product_param {
+    num_output: 10
+  }
+}
+layer {
+  name: "Simple_Layer"
+  type: "SimpleLayer"  # Define the custom "HardSigmoid" layer
+  bottom: "fc1"
+  top: "Simple_Layer"
+}
+layer {
+  name: "softmax"
+  type: "Softmax"
+  bottom: "Simple_Layer"  # Use the output of the "HardSigmoid" layer as input
+  top: "softmax"
+}
